@@ -37,14 +37,14 @@ pip3 install --break-system-packages adafruit-circuitpython-dht prometheus-clien
 # Download sensor script
 echo ""
 echo "[4/6] Downloading sensor script..."
-curl -fsSL "${REPO_URL}/src/temp-sensor.py" -o "${INSTALL_DIR}/temp-sensor.py"
+curl -fsSL "${REPO_URL}/device/temp-sensor.py" -o "${INSTALL_DIR}/temp-sensor.py"
 chmod +x "${INSTALL_DIR}/temp-sensor.py"
 chown pi:pi "${INSTALL_DIR}/temp-sensor.py" 2>/dev/null || true
 
 # Download and install systemd service
 echo ""
 echo "[5/6] Installing systemd service..."
-sudo curl -fsSL "${REPO_URL}/config/temp-sensor.service" -o /etc/systemd/system/temp-sensor.service
+sudo curl -fsSL "${REPO_URL}/device/temp-sensor.service" -o /etc/systemd/system/temp-sensor.service
 
 # Enable and start service
 echo ""
