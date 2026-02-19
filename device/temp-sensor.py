@@ -14,12 +14,12 @@ from datetime import datetime
 # Configuration
 CONFIG = {
     "sensor_type": "AM2302",  # AM2302, DHT22, or DHT11
-    "gpio_pin": board.D14,     # GPIO14 (physical pin 8)
+    "gpio_pin": board.D14,    # GPIO14 (physical pin 8)
     "port": 8000,
-    "read_interval": 10,       # seconds between readings
+    "read_interval": 10,      # seconds between readings
 }
 
-# Prometheus metrics with proper naming and descriptions
+# Prometheus metrics
 temperature_celsius = Gauge(
     'sensor_temperature_celsius',
     'Temperature reading in Celsius',
