@@ -49,7 +49,7 @@ GND (Pin 3)   → Ground (Pin 6)
       - Password: [choose a secure password]
     - **Wi-Fi:**
       - Choose network type (secure or open)
-      - SSID: [2.4 Ghz wifi network name]
+      - SSID: [2.4 GHz wifi network name]
       - Password: [wifi password]
     - **Remote access:** Enable SSH & use password authentication
 
