@@ -10,7 +10,7 @@ This project creates a temperature and humidity sensor that exports metrics in P
 - Power supply (5V, 2A recommended)
 
 ## Sensor & Wiring Guide
-Originally used the [DHT11](https://www.amazon.com/gp/product/B01H3J3H82/) but wanted something more accurate so went with [AM2302 Temperature & Humidity Sensor](https://www.amazon.com/gp/product/B073F472JL) ar a [4 Pack](https://www.amazon.com/dp/B0FCLX5GTZ)
+Originally used the [DHT11](https://www.amazon.com/gp/product/B01H3J3H82/) but wanted something more accurate so went with [AM2302 Temperature & Humidity Sensor](https://www.amazon.com/gp/product/B073F472JL) or a [4 Pack](https://www.amazon.com/dp/B0FCLX5GTZ)
 
 ### Wiring Guide
 
