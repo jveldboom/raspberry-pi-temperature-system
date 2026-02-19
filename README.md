@@ -20,7 +20,7 @@ DATA (Pin 2)  → GPIO 14 (Pin 8)
 GND (Pin 3)   → Ground (Pin 6)
 ```
 
-**Note:** Most AM2302 sensors have a built-in pull-up resistor. If yours doesn't, add a 10kΩ resistor between VCC and DATA pins.
+[Raspberry Pi Pin Layout Guide](https://pinout.xyz/)
 
 ## Software Installation
 
@@ -65,12 +65,12 @@ ssh pi@sensor-pi.local
 
 Then run the automated setup:
 ```bash
-curl -L https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/sensor-setup.sh | bash
+curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-system/main/sensor-setup.sh | bash
 ```
 
 **Or if you prefer to download and inspect first:**
 ```bash
-curl -L https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/sensor-setup.sh -o sensor-setup.sh
+curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-system/main/sensor-setup.sh -o sensor-setup.sh
 cat sensor-setup.sh  # Review the script
 bash sensor-setup.sh
 ```
