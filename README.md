@@ -1,4 +1,4 @@
-# Temperature Sensor Setup for Raspberry Pi Zero 2 W
+# Raspberry Pi Temperature Sensor
 
 This project creates a temperature and humidity sensor that exports metrics in Prometheus format.
 
@@ -9,7 +9,10 @@ This project creates a temperature and humidity sensor that exports metrics in P
 - MicroSD card (8GB or larger)
 - Power supply (5V, 2A recommended)
 
-## Wiring Diagram
+## Sensor & Wiring Guide
+Originally used the [DHT11](https://www.amazon.com/gp/product/B01H3J3H82/) but wanted something more accurate so went with [AM2302 Temperature & Humidity Sensor](https://www.amazon.com/gp/product/B073F472JL) or a [4 Pack](https://www.amazon.com/dp/B0FCLX5GTZ)
+
+### Wiring Guide
 
 Connect the AM2302 sensor to your Raspberry Pi:
 ```
@@ -21,29 +24,34 @@ GND (Pin 3)   → Ground (Pin 6)
 ```
 
 [Raspberry Pi Pin Layout Guide](https://pinout.xyz/)
+<details>
+<summary> AM2302 Diagram</summary>
+
+![wiring](./docs/sensor-AM2302-wiring.jpg)
+
+</details>
 
 ## Software Installation
 
 ### Step 1: Flash Raspberry Pi OS
 
-1. Download [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
+1. Download & install [Raspberry Pi Imager](https://www.raspberrypi.com/software/)
 2. Insert your microSD card
 3. In Raspberry Pi Imager:
-    - **Device:** Raspberry Pi Zero 2 W
-    - **OS:** Raspberry Pi OS Lite (64-bit) (in Raspberry Pi OS (other))
-    - **Storage:** Your SD card
-    - **Customization:**
-      - **Hostname:** `sensor-pi` (should be unique for each device as we will reference this later)
-      - **Localization:** (optional)
-      - **User:**
-        - Username: `pi`
-        - Password: [choose a secure password]
-      **Wi-Fi:**
-        - Choose network type (secure or open)
-        - SSID: [2.4 Ghz wifi network name]
-        - Password: [wifi password]
-
-      - **Remote access:** Enable SSH & use password authentication
+  - **Device:** Raspberry Pi Zero 2 W
+  - **OS:** Raspberry Pi OS Lite (64-bit) (in Raspberry Pi OS (other))
+  - **Storage:** Your SD card
+  - **Customization:**
+    - **Hostname:** `sensor-pi` (should be unique for each device as we will reference this later)
+    - **Localization:** (optional)
+    - **User:**
+      - Username: `pi`
+      - Password: [choose a secure password]
+    - **Wi-Fi:**
+      - Choose network type (secure or open)
+      - SSID: [2.4 Ghz wifi network name]
+      - Password: [wifi password]
+    - **Remote access:** Enable SSH & use password authentication
 
 4. Click **WRITE** to start
 
@@ -66,22 +74,6 @@ ssh pi@sensor-pi.local
 Then run the automated setup:
 ```bash
 curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-system/main/setup.sh | bash
-```
-
-**Or if you prefer to download and inspect first:**
-```bash
-curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-system/main/setup.sh -o setup.sh
-cat setup.sh  # Review the script
-bash setup.sh
-```
-
-**Or copy the script manually:**
-```bash
-nano setup.sh
-# Paste the script content
-# Press Ctrl+X, then Y, then Enter to save
-chmod +x setup.sh
-./setup.sh
 ```
 
 The installation takes 5-10 minutes and will:
