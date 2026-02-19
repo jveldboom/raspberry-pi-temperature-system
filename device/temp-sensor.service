@@ -1,0 +1,16 @@
+[Unit]
+Description=Temperature and Humidity Sensor (Prometheus Exporter)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi
+Environment="SENSOR_LOCATION=default"
+ExecStart=/usr/bin/python3 /home/pi/temp-sensor.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
