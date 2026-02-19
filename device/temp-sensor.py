@@ -39,7 +39,7 @@ humidity = Gauge(
 )
 
 read_errors = Gauge(
-    'sensor_read_errors_total',
+    'sensor_read_errors',
     'Total number of failed sensor reads'
 )
 

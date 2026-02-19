@@ -65,23 +65,23 @@ ssh pi@sensor-pi.local
 
 Then run the automated setup:
 ```bash
-curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-system/main/sensor-setup.sh | bash
+curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-system/main/setup.sh | bash
 ```
 
 **Or if you prefer to download and inspect first:**
 ```bash
-curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-system/main/sensor-setup.sh -o sensor-setup.sh
-cat sensor-setup.sh  # Review the script
-bash sensor-setup.sh
+curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-system/main/setup.sh -o setup.sh
+cat setup.sh  # Review the script
+bash setup.sh
 ```
 
 **Or copy the script manually:**
 ```bash
-nano sensor-setup.sh
+nano setup.sh
 # Paste the script content
 # Press Ctrl+X, then Y, then Enter to save
-chmod +x sensor-setup.sh
-./sensor-setup.sh
+chmod +x setup.sh
+./setup.sh
 ```
 
 The installation takes 5-10 minutes and will:
