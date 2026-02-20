@@ -19,7 +19,7 @@ Connect the AM2302 sensor to your Raspberry Pi:
 AM2302 Sensor → Raspberry Pi Zero 2 W
 ----------------------------------------
 VCC (Pin 1)   → 5V (Pin 1)
-DATA (Pin 2)  → GPIO 14 (Pin 8)
+DATA (Pin 2)  → GPIO 4 (Pin 7)
 GND (Pin 3)   → Ground (Pin 6)
 ```
 

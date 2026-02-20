@@ -12,10 +12,10 @@ import os
 
 # Configuration
 CONFIG = {
-    "gpio_pin": board.D14,         # GPIO14 (physical pin 8)
-    "port": 8000,                  # Prometheus metrics port
-    "read_interval": 10,           # Seconds between readings
-    "location": "default",         # Default location (can be overridden by SENSOR_LOCATION env var)
+    "gpio_pin": board.D7,       # GPIO4 (physical pin 7)
+    "port": 8000,               # Prometheus metrics port
+    "read_interval": 10,        # Seconds between readings
+    "location": "default",      # Default location (can be overridden by SENSOR_LOCATION env var)
 }
 
 # Prometheus metrics
