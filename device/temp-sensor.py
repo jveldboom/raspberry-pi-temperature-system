@@ -85,6 +85,11 @@ def main():
     global LOCATION
     LOCATION = os.environ.get('SENSOR_LOCATION', CONFIG["location"])
 
+    # Verify sensor is working before starting server
+    print("Checking sensor...")
+    if read_sensor() == (None, None):
+        raise Exception("Sensor not responding, will retry")
+
     print(f"Starting sensor on port {CONFIG['port']}, location: {LOCATION}")
     start_http_server(CONFIG["port"])
 

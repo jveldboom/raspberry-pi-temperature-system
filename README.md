@@ -139,7 +139,33 @@ curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-sys
 # Or to update to a specific branch/tag:
 curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-system/main/update.sh | bash -s v1.0.0
 ```
+## Useful Commands
+```bash
+# View live sensor output
+sudo journalctl -u temp-sensor -f
 
+# Restart service
+sudo systemctl restart temp-sensor
+
+# Stop service
+sudo systemctl stop temp-sensor
+
+# Start service
+sudo systemctl start temp-sensor
+
+# Disable autostart
+sudo systemctl disable temp-sensor
+
+# Re-enable autostart
+sudo systemctl enable temp-sensor
+
+# Edit sensor script
+nano /home/pi/temp-sensor.py
+
+# Test script manually (stop service first)
+sudo systemctl stop temp-sensor
+python3 /home/pi/temp-sensor.py
+```
 
 ## Troubleshooting
 
@@ -167,32 +193,4 @@ sudo journalctl -u temp-sensor --since today
 If you get import errors, try installing via apt instead:
 ```bash
 sudo apt install -y python3-adafruit-dht
-```
-
-## Useful Commands
-```bash
-# View live sensor output
-sudo journalctl -u temp-sensor -f
-
-# Restart service
-sudo systemctl restart temp-sensor
-
-# Stop service
-sudo systemctl stop temp-sensor
-
-# Start service
-sudo systemctl start temp-sensor
-
-# Disable autostart
-sudo systemctl disable temp-sensor
-
-# Re-enable autostart
-sudo systemctl enable temp-sensor
-
-# Edit sensor script
-nano /home/pi/temp-sensor.py
-
-# Test script manually (stop service first)
-sudo systemctl stop temp-sensor
-python3 /home/pi/temp-sensor.py
 ```
