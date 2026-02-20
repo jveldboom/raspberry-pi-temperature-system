@@ -129,70 +129,17 @@ Or use the IP address:
 http://192.168.x.x:8000/metrics
 ```
 
-## Configuration
 
-### Change GPIO Pin
+## Updating
+To update to the latest version:
 
-If your sensor is connected to a different GPIO pin, edit the script:
 ```bash
-nano /home/pi/temp-sensor.py
+curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-system/main/update.sh | bash
+
+# Or to update to a specific branch/tag:
+curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-system/main/update.sh | bash -s v1.0.0
 ```
 
-Change this line:
-```python
-"gpioPin": 14,  # update to match your wiring
-```
-
-Then restart the service:
-```bash
-sudo systemctl restart temp-sensor
-```
-
-### Change Sensor Type
-
-If you're using a different sensor (DHT11 or DHT22 instead of AM2302):
-```bash
-nano /home/pi/temp-sensor.py
-```
-
-Change this line:
-```python
-"sensor": Adafruit_DHT.AM2302,  # Change to DHT11 or DHT22 if needed
-```
-
-Options:
-- `Adafruit_DHT.DHT11`
-- `Adafruit_DHT.DHT22`
-- `Adafruit_DHT.AM2302`
-
-### Change Metrics Port
-
-To change the port from 8000 to something else:
-```bash
-nano /home/pi/temp-sensor.py
-```
-
-Change:
-```python
-"port": 8000,  # Change to your desired port
-```
-
-Then restart:
-```bash
-sudo systemctl restart temp-sensor
-```
-
-## Integrating with Prometheus
-
-Add this to your `prometheus.yml`:
-```yaml
-scrape_configs:
-  - job_name: 'raspberry-pi-sensor'
-    static_configs:
-      - targets: ['sensor-pi.local:8000']
-        labels:
-          location: 'living_room'  # customize as needed
-```
 
 ## Troubleshooting
 
@@ -214,15 +161,6 @@ sudo journalctl -u temp-sensor --since today
 - Verify GPIO pin number in config
 - Make sure sensor has power (3.3V or 5V depending on sensor)
 - Try adding a small delay between readings (already set to 10 seconds)
-
-### Can't access metrics from another device
-```bash
-# Check if service is listening on all interfaces
-sudo netstat -tuln | grep 8000
-
-# Check firewall (usually not an issue on Raspberry Pi OS)
-sudo ufw status
-```
 
 ### Python library issues
 
@@ -258,16 +196,3 @@ nano /home/pi/temp-sensor.py
 sudo systemctl stop temp-sensor
 python3 /home/pi/temp-sensor.py
 ```
-
-## Support
-
-If you encounter issues, check the logs first:
-```bash
-sudo journalctl -u temp-sensor -n 100
-```
-
-Common issues are usually:
-- Incorrect wiring
-- Wrong GPIO pin in configuration
-- Sensor not receiving power
-- Bad sensor (try a different one)
