@@ -19,7 +19,7 @@ Connect the AM2302 sensor to your Raspberry Pi:
 AM2302 Sensor → Raspberry Pi Zero 2 W
 ----------------------------------------
 VCC (Pin 1)   → 5V (Pin 1)
-DATA (Pin 2)  → GPIO 14 (Pin 8)
+DATA (Pin 2)  → GPIO 4 (Pin 7)
 GND (Pin 3)   → Ground (Pin 6)
 ```
 
@@ -59,8 +59,7 @@ GND (Pin 3)   → Ground (Pin 6)
 
 1. Insert the SD card into your Raspberry Pi Zero 2 W
 2. Connect power
-3. Wait 2-5 minutes for first boot (it takes a while!)
-4. Check your router for the device's IP address
+3. Wait 2-5 minutes for first boot
 
 ### Step 3: Run Automated Setup
 
@@ -76,7 +75,7 @@ Then run the automated setup:
 curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-system/main/setup.sh | bash
 ```
 
-The installation takes 5-10 minutes and will:
+The installation takes 10-15 minutes depending on your internet & SD card speed and will:
 - Update the system
 - Install required dependencies
 - Install the sensor script
@@ -99,7 +98,7 @@ sudo journalctl -u temp-sensor -f
 
 You should see output like:
 ```
-Temp: 72.5°F, Humidity: 45.2%
+Temp: 69.8°F (21.0°C), Humidity: 51.4%
 ```
 
 ### Check Prometheus metrics:
@@ -107,128 +106,25 @@ Temp: 72.5°F, Humidity: 45.2%
 curl http://localhost:8000/metrics
 ```
 
-You should see:
-```
-# HELP temperature_fahrenheit Temperature in Fahrenheit
-# TYPE temperature_fahrenheit gauge
-temperature_fahrenheit 72.5
-# HELP humidity_percent Humidity percentage
-# TYPE humidity_percent gauge
-humidity_percent 45.2
-```
-
 ### Test from another device:
 
 From your computer, open a browser and go to:
-```
+```bash
 http://<HOSTNAME>.local:8000/metrics
-```
 
-Or use the IP address:
-```
+# or use ip address
 http://192.168.x.x:8000/metrics
 ```
 
-## Configuration
 
-### Change GPIO Pin
+## Updating
+To update to the latest version:
 
-If your sensor is connected to a different GPIO pin, edit the script:
 ```bash
-nano /home/pi/temp-sensor.py
-```
+curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-system/main/update.sh | bash
 
-Change this line:
-```python
-"gpioPin": 14,  # update to match your wiring
-```
-
-Then restart the service:
-```bash
-sudo systemctl restart temp-sensor
-```
-
-### Change Sensor Type
-
-If you're using a different sensor (DHT11 or DHT22 instead of AM2302):
-```bash
-nano /home/pi/temp-sensor.py
-```
-
-Change this line:
-```python
-"sensor": Adafruit_DHT.AM2302,  # Change to DHT11 or DHT22 if needed
-```
-
-Options:
-- `Adafruit_DHT.DHT11`
-- `Adafruit_DHT.DHT22`
-- `Adafruit_DHT.AM2302`
-
-### Change Metrics Port
-
-To change the port from 8000 to something else:
-```bash
-nano /home/pi/temp-sensor.py
-```
-
-Change:
-```python
-"port": 8000,  # Change to your desired port
-```
-
-Then restart:
-```bash
-sudo systemctl restart temp-sensor
-```
-
-## Integrating with Prometheus
-
-Add this to your `prometheus.yml`:
-```yaml
-scrape_configs:
-  - job_name: 'raspberry-pi-sensor'
-    static_configs:
-      - targets: ['sensor-pi.local:8000']
-        labels:
-          location: 'living_room'  # customize as needed
-```
-
-## Troubleshooting
-
-### Service won't start
-```bash
-# Check service status
-sudo systemctl status temp-sensor
-
-# View detailed logs
-sudo journalctl -u temp-sensor -n 50
-
-# Check for errors
-sudo journalctl -u temp-sensor --since today
-```
-
-### Getting "Failed to get reading" errors
-
-- Check your wiring connections
-- Verify GPIO pin number in config
-- Make sure sensor has power (3.3V or 5V depending on sensor)
-- Try adding a small delay between readings (already set to 10 seconds)
-
-### Can't access metrics from another device
-```bash
-# Check if service is listening on all interfaces
-sudo netstat -tuln | grep 8000
-
-# Check firewall (usually not an issue on Raspberry Pi OS)
-sudo ufw status
-```
-
-### Python library issues
-
-If you get import errors, try installing via apt instead:
-```bash
-sudo apt install -y python3-adafruit-dht
+# Or to update to a specific branch/tag:
+curl -L https://raw.githubusercontent.com/jveldboom/raspberry-pi-temperature-system/main/update.sh | bash -s v1.0.0
 ```
 
 ## Useful Commands
@@ -259,15 +155,21 @@ sudo systemctl stop temp-sensor
 python3 /home/pi/temp-sensor.py
 ```
 
-## Support
+## Troubleshooting
 
-If you encounter issues, check the logs first:
+### Service won't start
 ```bash
-sudo journalctl -u temp-sensor -n 100
+# Check service status
+sudo systemctl status temp-sensor
+
+# View logs
+sudo journalctl -u temp-sensor -f
+sudo journalctl -u temp-sensor --since today
 ```
 
-Common issues are usually:
-- Incorrect wiring
-- Wrong GPIO pin in configuration
-- Sensor not receiving power
-- Bad sensor (try a different one)
+### Sensor Errors
+- Check your wiring connections - [Raspberry Pi pinout diagram](https://pinout.xyz/)
+  - Avoid GPIO 14 and 15 — these are reserved for UART (serial console) and are active during boot, which can interfere with sensor initialization
+  - GPIO 4 is recommended for the data line
+- Verify GPIO pin number in config matches your wiring
+- Make sure sensor has power (5V recommended for AM2302)

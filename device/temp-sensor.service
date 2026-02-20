@@ -8,6 +8,8 @@ Type=simple
 User=pi
 WorkingDirectory=/home/pi
 Environment="SENSOR_LOCATION=default"
+Environment="PYTHONUNBUFFERED=1"
+ExecStartPre=/bin/sleep 10
 ExecStart=/usr/bin/python3 /home/pi/temp-sensor.py
 Restart=always
 RestartSec=10
