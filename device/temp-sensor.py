@@ -16,6 +16,7 @@ CONFIG = {
     "port": 8000,               # Prometheus metrics port
     "read_interval": 10,        # Seconds between readings
     "location": "default",      # Default location (can be overridden by SENSOR_LOCATION env var)
+    "max_consecutive_errors": 20,  # Max consecutive errors before forcing restart
 }
 
 # Prometheus metrics
@@ -38,8 +39,8 @@ humidity = Gauge(
 )
 
 read_errors = Gauge(
-    'sensor_read_errors_total',
-    'Total number of failed sensor reads'
+    'sensor_read_errors_consecutive',
+    'Number of consecutive failed sensor reads'
 )
 
 last_successful_read = Gauge(
@@ -51,44 +52,43 @@ last_successful_read = Gauge(
 dht_device = adafruit_dht.DHT22(CONFIG["gpio_pin"])
 
 # Track metrics
-error_count = 0
-
-def read_sensor():
-    """Read temperature and humidity from sensor. Returns (temp_c, humidity) or (None, None) on error."""
-    try:
-        temp_c = dht_device.temperature
-        humid = dht_device.humidity
-        if temp_c is not None and humid is not None:
-            return temp_c, humid
-    except Exception as e:
-        print(f"Sensor read error: {e}")
-    return None, None
+consecutive_errors = 0
 
 def update_metrics():
     """Read sensor and update Prometheus metrics"""
-    global error_count
-    temp_c, humid = read_sensor()
+    global consecutive_errors
 
-    if temp_c is not None and humid is not None:
+    try:
+        temp_c = dht_device.temperature
+        humid = dht_device.humidity
+
+        if temp_c is None or humid is None:
+            raise RuntimeError("Sensor returned None")
+
+        # Success - update metrics
         temp_f = temp_c * 9.0 / 5.0 + 32.0
         temperature_celsius.labels(location=LOCATION).set(temp_c)
         temperature_fahrenheit.labels(location=LOCATION).set(temp_f)
         humidity.labels(location=LOCATION).set(humid)
         last_successful_read.set(time.time())
+        consecutive_errors = 0
+        read_errors.set(0)
         print(f"Temp: {temp_f:.1f}°F ({temp_c:.1f}°C), Humidity: {humid:.1f}%")
-    else:
-        error_count += 1
-        read_errors.set(error_count)
-        print(f"Failed to read sensor (total errors: {error_count})")
+
+    except Exception as e:
+        print(f"Sensor read error: {e}")
+        consecutive_errors += 1
+        read_errors.set(consecutive_errors)
+        print(f"Failed to read sensor (consecutive errors: {consecutive_errors})")
+
+        # Force restart if too many consecutive errors
+        if consecutive_errors >= CONFIG["max_consecutive_errors"]:
+            print(f"ERROR: Max consecutive errors reached. Exiting to force restart...")
+            raise SystemExit(1)
 
 def main():
     global LOCATION
     LOCATION = os.environ.get('SENSOR_LOCATION', CONFIG["location"])
-
-    # Verify sensor is working before starting server
-    print("Checking sensor...")
-    if read_sensor() == (None, None):
-        raise Exception("Sensor not responding, will retry")
 
     print(f"Starting sensor on port {CONFIG['port']}, location: {LOCATION}")
     start_http_server(CONFIG["port"])
