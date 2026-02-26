@@ -72,6 +72,7 @@ def update_metrics():
         humidity.labels(location=LOCATION).set(humid)
         last_successful_read.set(time.time())
         consecutive_errors = 0
+        read_errors.set(0)
         print(f"Temp: {temp_f:.1f}°F ({temp_c:.1f}°C), Humidity: {humid:.1f}%")
 
     except Exception as e:
